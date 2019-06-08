@@ -2,7 +2,7 @@
 
 package com.thebylito.navigationbarcolor;
 
-
+import android.content.res.Resources;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
