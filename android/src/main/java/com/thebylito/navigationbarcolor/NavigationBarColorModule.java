@@ -45,7 +45,8 @@ public class NavigationBarColorModule extends ReactContextBaseJavaModule {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Window window = activity.getWindow();
             int flags = window.getDecorView().getSystemUiVisibility();
-
+            flags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+            flags |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             if (light) {
                 flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
             } else {
