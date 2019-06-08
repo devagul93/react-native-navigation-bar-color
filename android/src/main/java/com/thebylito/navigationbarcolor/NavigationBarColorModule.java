@@ -56,6 +56,12 @@ public class NavigationBarColorModule extends ReactContextBaseJavaModule {
         }
     }
 
+    private boolean hasNavBar (Resources resources)
+    {
+        int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
+        return id > 0 && resources.getBoolean(id);
+    }
+
 
     @Override
     public String getName() {
