@@ -58,22 +58,21 @@ public class NavigationBarColorModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void hasNavBarHeight(final Promise promise)
-    {
+    public void HasNavBarHeight(final Promise promise) {
         int id = getCurrentActivity().getResources().getIdentifier("config_showNavigationBar", "bool", "android");
-        int heightResourceId = getCurrentActivity().getResources().getIdentifier("navigation_bar_height","dimen", "android");
+        int heightResourceId = getCurrentActivity().getResources().getIdentifier("navigation_bar_height", "dimen",
+                "android");
         int height = 0;
         if (heightResourceId > 0) {
-            height =  getCurrentActivity().getResources().getDimensionPixelSize(heightResourceId);
+            height = getCurrentActivity().getResources().getDimensionPixelSize(heightResourceId);
         }
         promise.resolve(Integer.toString(height));
     }
 
     @ReactMethod
-    public void hasNavBar (final Promise promise)
-    {
+    public void HasNavBar(final Promise promise) {
         int id = getCurrentActivity().getResources().getIdentifier("config_showNavigationBar", "bool", "android");
-        return promise.resolve(Boolean.toString(id > 0 && resources.getBoolean(id)));
+        promise.resolve(Boolean.toString(id > 0 && getCurrentActivity().getResources().getBoolean(id)));
     }
 
 
