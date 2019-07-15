@@ -23,17 +23,17 @@ const ShowNavigationBar = () => {
   }
 };
 
-const HasNavBar = () => {
+const HasNavBar = callback => {
   if (Platform.OS === "android") {
-    NavigationBarColor.HasNavBar();
+    NavigationBarColor.HasNavBar(callback);
   } else {
     return false;
   }
 };
 
-const HasNavBarHeight = () => {
+const HasNavBarHeight = callback => {
   if (Platform.OS === "android") {
-    NavigationBarColor.HasNavBarHeight();
+    NavigationBarColor.HasNavBarHeight(callback);
   } else {
     return false;
   }
