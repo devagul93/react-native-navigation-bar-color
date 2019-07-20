@@ -8,6 +8,14 @@ const changeNavigationBarColor = (color = String, light = false) => {
     NavigationBarColor.changeNavigationBarColor(color, LightNav);
   }
 };
+
+const setNavigationBarTheme = (light = false) => {
+  if (Platform.OS === "android") {
+    const LightNav = light ? true : false;
+    NavigationBarColor.setNavigationBarTheme(LightNav);
+  }
+};
+
 const HideNavigationBar = () => {
   if (Platform.OS === "android") {
     return NavigationBarColor.HideNavigationBar();
@@ -40,6 +48,7 @@ const HasNavBarHeight = callback => {
 };
 export {
   changeNavigationBarColor,
+  setNavigationBarTheme,
   HideNavigationBar,
   ShowNavigationBar,
   HasNavBar,
