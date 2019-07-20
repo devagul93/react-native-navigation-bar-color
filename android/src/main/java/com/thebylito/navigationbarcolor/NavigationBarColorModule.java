@@ -8,10 +8,12 @@ import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Build;
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -30,8 +32,7 @@ public class NavigationBarColorModule extends ReactContextBaseJavaModule {
     public static final String REACT_CLASS = "NavigationBarColor";
     private static ReactApplicationContext reactContext = null;
     private static final int UI_FLAG_HIDE_NAV_BAR = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
     public NavigationBarColorModule(ReactApplicationContext context) {
@@ -58,24 +59,56 @@ public class NavigationBarColorModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void setNavigationBarTheme(final Boolean light) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Stuff that updates the UI
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Window window = getCurrentActivity().getWindow();
+                    int flags = window.getDecorView().getSystemUiVisibility();
+                    flags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+                    flags |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                    if (light) {
+                        flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                    } else {
+                        flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                    }
+
+                    window.getDecorView().setSystemUiVisibility(flags);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void HasNavBarHeight(Callback successCallback) {
-        int id = getCurrentActivity().getResources().getIdentifier("config_showNavigationBar", "bool", "android");
-        int heightResourceId = getCurrentActivity().getResources().getIdentifier("navigation_bar_height", "dimen",
-                "android");
-        int height = 0;
-        if (heightResourceId > 0) {
-            height = getCurrentActivity().getResources().getDimensionPixelSize(heightResourceId);
+        try{
+            int id = getCurrentActivity().getResources().getIdentifier("config_showNavigationBar", "bool", "android");
+            int heightResourceId = getCurrentActivity().getResources().getIdentifier("navigation_bar_height", "dimen",
+                    "android");
+            int height = 0;
+            if (heightResourceId > 0) {
+                height = getCurrentActivity().getResources().getDimensionPixelSize(heightResourceId);
+            }
+            successCallback.invoke(height);
+        }catch (Exception e){
+            successCallback.invoke(0);
         }
-        successCallback.invoke(height);
+
     }
 
     @ReactMethod
     public void HasNavBar(Callback successCallback) {
-        int id = getCurrentActivity().getResources().getIdentifier("config_showNavigationBar", "bool", "android");
-        Boolean result = id > 0 && getCurrentActivity().getResources().getBoolean(id);
-        successCallback.invoke(result);
-    }
+        try{
+            int id = getCurrentActivity().getResources().getIdentifier("config_showNavigationBar", "bool", "android");
+            Boolean result = id > 0 && getCurrentActivity().getResources().getBoolean(id);
+            successCallback.invoke(result);
+        }catch(Exception e){
+            successCallback.invoke(false);
+        }
 
+    }
 
     @Override
     public String getName() {
@@ -106,8 +139,9 @@ public class NavigationBarColorModule extends ReactContextBaseJavaModule {
                             final Window window = getCurrentActivity().getWindow();
                             Integer colorFrom = window.getNavigationBarColor();
                             Integer colorTo = Color.parseColor(String.valueOf(color));
-                            //window.setNavigationBarColor(colorTo);
-                            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+                            // window.setNavigationBarColor(colorTo);
+                            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom,
+                                    colorTo);
                             colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
                                 @Override
@@ -132,7 +166,6 @@ public class NavigationBarColorModule extends ReactContextBaseJavaModule {
                     }
                 }
             });
-
 
         } catch (IllegalViewOperationException e) {
             WritableMap map = Arguments.createMap();
