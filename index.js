@@ -1,4 +1,17 @@
-import { changeNavigationBarColor, HideNavigationBar, ShowNavigationBar,HasNavBarHeight, HasNavBar } from './src';
+import {
+  changeNavigationBarColor,
+  setNavigationBarTheme,
+  HideNavigationBar,
+  ShowNavigationBar,
+  HasNavBarHeight,
+  HasNavBar
+} from "./src";
 
 export default changeNavigationBarColor;
-export { HideNavigationBar, ShowNavigationBar, HasNavBarHeight, HasNavBar };
+export {
+  setNavigationBarTheme,
+  HideNavigationBar,
+  ShowNavigationBar,
+  HasNavBarHeight,
+  HasNavBar
+};
